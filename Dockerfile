@@ -2,10 +2,23 @@ FROM python:3.10-slim
 
 WORKDIR /code
 
+# Copy requirements first (for better caching)
 COPY ./requirements.txt /code/requirements.txt
 
+# Install dependencies
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
+# Copy app code
 COPY ./app /code/app
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+# Copy frontend
+COPY ./frontend /code/frontend
+
+# Set environment variables
+ENV PORT=8000
+
+# Expose port
+EXPOSE 8000
+
+# Run the application
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
