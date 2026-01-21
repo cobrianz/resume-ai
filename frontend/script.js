@@ -1,5 +1,23 @@
 // API Configuration
-const API_BASE_URL = 'http://localhost:8000/api/v1';
+// Auto-detect environment
+const getAPIBaseURL = () => {
+    if (typeof window !== 'undefined') {
+        const hostname = window.location.hostname;
+        const protocol = window.location.protocol;
+        
+        // If on localhost, use localhost API
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+            return 'http://localhost:8000/api/v1';
+        }
+        
+        // If deployed, use same domain API
+        // Railway and most platforms serve frontend and backend from same domain
+        return `${protocol}//${hostname}/api/v1`;
+    }
+    return 'http://localhost:8000/api/v1'; // Fallback
+};
+
+const API_BASE_URL = getAPIBaseURL();
 
 // Mobile Menu Toggle
 const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -313,28 +331,32 @@ if (refineBtn) {
                 body: formData
             });
 
-            if (!response.ok) throw new Error('Refinement failed');
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.detail || `HTTP ${response.status}: Refinement failed`);
+            }
 
             const data = await response.json();
 
             // Update UI
-            document.getElementById('refinedSummary').textContent = data.summary;
+            document.getElementById('refinedSummary').textContent = data.summary || 'No summary generated';
 
             // Format Experience (convert Markdown list to HTML)
-            const expHTML = data.experience
+            const expText = data.experience || 'No experience generated';
+            const expHTML = expText
                 .split('\n')
                 .filter(line => line.trim().startsWith('-') || line.trim().startsWith('•'))
-                .map(line => `<div class="mb-2"><i class="fas fa-check text-success me-2"></i>${line.replace(/^[-•]\s*/, '')}</div>`)
+                .map(line => `<div style="margin-bottom: 8px;"><strong>✓</strong> ${line.replace(/^[-•]\s*/, '')}</div>`)
                 .join('');
 
-            document.getElementById('refinedExperience').innerHTML = expHTML || data.experience;
+            document.getElementById('refinedExperience').innerHTML = expHTML || `<p>${expText}</p>`;
 
             refinedContent.style.display = 'block';
             refinedContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         } catch (error) {
-            console.error(error);
-            showNotification('Failed to refine resume', 'error');
+            console.error('Refine error:', error);
+            showNotification(`Failed to refine resume: ${error.message}`, 'error');
         } finally {
             refineBtn.disabled = false;
             document.getElementById('refineBtnText').textContent = 'Refine Resume';

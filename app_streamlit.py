@@ -4,57 +4,307 @@ import tempfile
 import json
 from pathlib import Path
 
-# Configure page
 st.set_page_config(
-    page_title="Resume AI",
-    page_icon="�",
+    page_title="Resume AI - Smart Resume Analysis",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
-# Add custom CSS
 st.markdown("""
     <style>
-    .main {
-        padding-top: 2rem;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
-    .stTabs [data-baseweb="tab-list"] button {
+    
+    body {
+        background: #f8f9ff;
+    }
+    
+    .main {
+        background: white;
+        padding: 0;
+    }
+    
+    [data-testid="stSidebar"] {
+        display: none;
+    }
+    
+    [data-testid="stAppViewContainer"] {
+        padding: 0;
+    }
+    
+    .hero {
+        background: linear-gradient(180deg, #f8f9ff 0%, #ffffff 100%);
+        padding: 100px 40px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-content {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    
+    .hero-badge {
+        display: inline-block;
+        padding: 8px 20px;
+        background: rgba(102, 126, 234, 0.1);
+        color: #667eea;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 24px;
+    }
+    
+    .hero-title {
+        font-size: 56px;
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: 24px;
+        color: #1f2937;
+    }
+    
+    .gradient-text {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .hero-subtitle {
+        font-size: 18px;
+        color: #6b7280;
+        line-height: 1.6;
+        max-width: 600px;
+        margin: 0 auto 40px;
+    }
+    
+    .section-title {
+        font-size: 40px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 60px;
+    }
+    
+    .features {
+        padding: 80px 40px;
+        background: #f9fafb;
+    }
+    
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 32px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .feature-card {
+        background: white;
+        padding: 32px;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .feature-card h3 {
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+    
+    .feature-card p {
+        color: #6b7280;
+        font-size: 14px;
+    }
+    
+    .analyzer {
+        padding: 80px 40px;
+        background: white;
+    }
+    
+    .analyzer-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .score-card {
+        background: white;
+        padding: 32px;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        margin-bottom: 24px;
+    }
+    
+    .score-item {
+        display: grid;
+        grid-template-columns: 140px 1fr 60px;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+    
+    .progress-bar {
+        height: 8px;
+        background: #f9fafb;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        transition: width 1s ease;
+    }
+    
+    .skill-tag {
+        display: inline-block;
+        padding: 8px 16px;
+        background: #fef3c7;
+        color: #92400e;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+        margin-right: 8px;
+        margin-bottom: 8px;
+    }
+    
+    .how-it-works {
+        padding: 80px 40px;
+        background: #f9fafb;
+    }
+    
+    .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 32px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .step {
+        text-align: center;
+    }
+    
+    .step-number {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 auto 20px;
+    }
+    
+    .step h3 {
+        margin-bottom: 12px;
         font-size: 18px;
     }
-    .info-box {
-        padding: 1rem;
-        border-radius: 0.5rem;
-        margin: 1rem 0;
+    
+    .step p {
+        color: #6b7280;
+        font-size: 14px;
     }
-    .success-box {
-        background-color: #d4edda;
-        border: 1px solid #c3e6cb;
-        color: #155724;
-    }
-    .warning-box {
-        background-color: #fff3cd;
-        border: 1px solid #ffeaa7;
-        color: #856404;
+    
+    .footer {
+        background: #1f2937;
+        color: white;
+        padding: 40px;
+        text-align: center;
+        font-size: 14px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Import services
-from app.services.resume_parser import resume_parser
-from app.services.job_analyzer import job_analyzer
-from app.services.matching_engine import matching_engine
-from app.services.tailoring_service import tailoring_service
+# Import services with error handling
+try:
+    from app.services.resume_parser import resume_parser
+    from app.services.job_analyzer import job_analyzer
+    from app.services.matching_engine import matching_engine
+    from app.services.tailoring_service import tailoring_service
+    services_loaded = True
+except Exception as e:
+    services_loaded = False
+    error_msg = str(e)
 
-# Page header
-st.title("Resume AI")
-st.markdown("### AI-Powered Resume & Job Matching Platform")
-st.markdown("Analyze your resume, match it against job descriptions, and get tailored improvement suggestions.")
+# Header
+st.markdown("""
+    <div style="display: flex; align-items: center; gap: 12px; padding: 20px 40px; border-bottom: 1px solid #e5e7eb; background: white;">
+        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">R</div>
+        <span style="font-size: 24px; font-weight: 700; color: #1f2937;">Resume AI</span>
+    </div>
+""", unsafe_allow_html=True)
 
-# Sidebar navigation
-st.sidebar.title("Navigation")
-page = st.sidebar.radio(
-    "Choose a feature:",
-    ["Analyze Resume", "Match Resume to Job", "Refine Resume", "About"]
+# Hero Section
+st.markdown("""
+    <div class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">AI-Powered Analysis</div>
+            <h1 class="hero-title">Build a Job-Winning <span class="gradient-text">Resume</span> Effortlessly with AI.</h1>
+            <p class="hero-subtitle">Build a standout, job-ready resume in minutes with AI. Get career-polished, and tailored content—fast, simple, and effortlessly professional.</p>
+        </div>
+    </div>
+""", unsafe_allow_html=True)
+
+# Features Section
+st.markdown("""
+    <div class="features">
+        <h2 class="section-title">Powerful Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Smart Parsing</h3>
+                <p>Automatically extract skills, experience, and education from PDF/DOCX resumes</p>
+            </div>
+            <div class="feature-card">
+                <h3>AI Matching</h3>
+                <p>Semantic analysis with 40% skills + 40% experience + 20% keywords scoring</p>
+            </div>
+            <div class="feature-card">
+                <h3>Smart Suggestions</h3>
+                <p>Get context-aware recommendations to improve your resume for specific roles</p>
+            </div>
+            <div class="feature-card">
+                <h3>Privacy First</h3>
+                <p>Your data is never stored. All files are auto-deleted after analysis</p>
+            </div>
+        </div>
+    </div>
+""", unsafe_allow_html=True)
+
+# Main Analyzer Section
+st.markdown("""
+    <div class="analyzer">
+        <h2 class="section-title">Analyze Your Resume</h2>
+        <div class="analyzer-container">
+""", unsafe_allow_html=True)
+
+if not services_loaded:
+    st.error(f"Error loading services: {error_msg}")
+    st.info("Please install dependencies: pip install -r requirements.txt")
+    st.stop()
+
+# Step 1: Upload Resume
+st.markdown("<h3>Step 1: Upload Your Resume</h3>", unsafe_allow_html=True)
+uploaded_file = st.file_uploader("Choose a file", type=["pdf", "docx"], label_visibility="collapsed")
+
+# Step 2: Job Description
+st.markdown("<h3 style='margin-top: 32px;'>Step 2: Paste Job Description</h3>", unsafe_allow_html=True)
+job_description = st.text_area(
+    "Job Description",
+    placeholder="Paste the job description here...\n\nExample:\nSenior Python Developer\n\nResponsibilities:\n- Build scalable REST APIs using FastAPI\n- Design database schemas\n\nRequirements:\n- 5+ years Python experience\n- Strong knowledge of FastAPI and Docker",
+    height=200,
+    label_visibility="collapsed"
 )
 
 # Initialize session state
@@ -65,287 +315,139 @@ if "job_data" not in st.session_state:
 if "match_results" not in st.session_state:
     st.session_state.match_results = None
 
-# ===========================
-# PAGE: Analyze Resume
-# ===========================
-if page == "Analyze Resume":
-    st.header("Parse Your Resume")
-    st.markdown("Upload your resume (PDF or DOCX) to extract structured information.")
-    
-    col1, col2 = st.columns([2, 1])
-    
-    with col1:
-        uploaded_file = st.file_uploader(
-            "Upload resume",
-            type=["pdf", "docx"],
-            help="Supported formats: PDF, DOCX"
-        )
-    
-    if uploaded_file is not None:
-        with st.spinner("🔄 Parsing your resume..."):
-            try:
-                # Save temp file
-                with tempfile.NamedTemporaryFile(delete=False, suffix=Path(uploaded_file.name).suffix) as tmp_file:
-                    tmp_file.write(uploaded_file.getbuffer())
-                    tmp_path = tmp_file.name
-                
-                # Parse resume
-                file_type = "application/pdf" if uploaded_file.type == "application/pdf" else "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                parsed_resume = resume_parser.parse(tmp_path, file_type)
-                
-                st.session_state.resume_data = parsed_resume
-                
-                # Clean up
-                os.unlink(tmp_path)
-                
-                st.success("Resume parsed successfully!")
-                
-                # Display parsed data
-                with st.expander("Parsed Resume Data", expanded=True):
-                    st.json(parsed_resume)
-                
-                # Display summary
-                col1, col2, col3 = st.columns(3)
-                with col1:
-                    skills = parsed_resume.get("skills", [])
-                    st.metric("Skills Found", len(skills))
-                    if skills:
-                        st.caption(", ".join(skills[:5]) + ("..." if len(skills) > 5 else ""))
-                
-                with col2:
-                    experience = parsed_resume.get("experience", [])
-                    st.metric("Experience Entries", len(experience))
-                
-                with col3:
-                    education = parsed_resume.get("education", [])
-                    st.metric("Education Entries", len(education))
-                
-            except Exception as e:
-                st.error(f"Error parsing resume: {str(e)}")
+col1, col2 = st.columns([3, 1])
+with col1:
+    if st.button("Analyze Resume", use_container_width=True, type="primary"):
+        if uploaded_file is None:
+            st.error("Please upload a resume")
+        elif len(job_description.strip()) < 50:
+            st.error("Please enter a job description (at least 50 characters)")
+        else:
+            with st.spinner("Analyzing your resume..."):
+                try:
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=Path(uploaded_file.name).suffix) as tmp_file:
+                        tmp_file.write(uploaded_file.getbuffer())
+                        tmp_path = tmp_file.name
+                    
+                    file_type = "application/pdf" if uploaded_file.type == "application/pdf" else "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    parsed_resume = resume_parser.parse(tmp_path, file_type)
+                    st.session_state.resume_data = parsed_resume
+                    
+                    job_data = job_analyzer.analyze(job_description)
+                    st.session_state.job_data = job_data
+                    
+                    match_result = matching_engine.calculate_match(parsed_resume, job_data)
+                    st.session_state.match_results = match_result
+                    
+                    os.unlink(tmp_path)
+                    st.success("Analysis complete!")
+                    
+                except Exception as e:
+                    st.error(f"Error: {str(e)}")
 
-# ===========================
-# PAGE: Match Resume to Job
-# ===========================
-elif page == "Match Resume to Job":
-    st.header("Match Resume to Job Description")
-    
-    if st.session_state.resume_data is None:
-        st.warning("Please upload a resume first in the 'Analyze Resume' section.")
-    else:
-        col1, col2 = st.columns([1, 1])
-        
-        with col1:
-            st.subheader("Resume Preview")
-            st.json({
-                "skills": st.session_state.resume_data.get("skills", [])[:5],
-                "experience_entries": len(st.session_state.resume_data.get("experience", [])),
-                "education_entries": len(st.session_state.resume_data.get("education", []))
-            })
-        
-        with col2:
-            st.subheader("Job Description")
-            job_description = st.text_area(
-                "Paste job description here:",
-                height=250,
-                placeholder="Enter the complete job description..."
-            )
-        
-        if st.button("Analyze Match", type="primary", use_container_width=True):
-            if not job_description.strip():
-                st.error("Please enter a job description.")
-            else:
-                with st.spinner("⏳ Analyzing match..."):
-                    try:
-                        # Analyze job
-                        job_data = job_analyzer.analyze(job_description)
-                        st.session_state.job_data = job_data
-                        
-                        # Calculate match
-                        match_result = matching_engine.calculate_match(
-                            st.session_state.resume_data,
-                            job_data
-                        )
-                        st.session_state.match_results = match_result
-                        
-                        st.success("Analysis complete!")
-                        
-                        # Display match results
-                        st.markdown("---")
-                        
-                        # Overall score
-                        col1, col2, col3 = st.columns(3)
-                        
-                        with col1:
-                            score = match_result.get("overall_score", 0)
-                            st.metric("Overall Match", f"{score:.1f}%")
-                        
-                        with col2:
-                            skills_score = match_result.get("skills_score", 0)
-                            st.metric("Skills Match", f"{skills_score:.1f}%")
-                        
-                        with col3:
-                            exp_score = match_result.get("experience_score", 0)
-                            st.metric("Experience Match", f"{exp_score:.1f}%")
-                        
-                        # Detailed results
-                        st.markdown("### Detailed Analysis")
-                        
-                        tabs = st.tabs(["Overview", "Matched Skills", "Missing Skills", "Details"])
-                        
-                        with tabs[0]:
-                            st.json(match_result)
-                        
-                        with tabs[1]:
-                            matched = match_result.get("matched_skills", [])
-                            if matched:
-                                st.success(f"{len(matched)} skills matched:")
-                                for skill in matched[:10]:
-                                    st.caption(f"• {skill}")
-                            else:
-                                st.info("No matched skills found.")
-                        
-                        with tabs[2]:
-                            missing = match_result.get("missing_skills", [])
-                            if missing:
-                                st.warning(f"{len(missing)} skills missing:")
-                                for skill in missing[:10]:
-                                    st.caption(f"• {skill}")
-                            else:
-                                st.success("All required skills are present!")
-                        
-                        with tabs[3]:
-                            st.json({
-                                "job_requirements": job_data,
-                                "full_match_details": match_result
-                            })
-                        
-                    except Exception as e:
-                        st.error(f"Error analyzing match: {str(e)}")
+st.markdown("</div></div>", unsafe_allow_html=True)
 
-# ===========================
-# PAGE: Refine Resume
-# ===========================
-elif page == "Refine Resume":
-    st.header("Refine Your Resume")
-    
-    if st.session_state.resume_data is None or st.session_state.job_data is None:
-        st.warning("Please complete the following steps first:")
-        st.info("1. Upload and parse your resume in 'Analyze Resume'")
-        st.info("2. Match your resume to a job in 'Match Resume to Job'")
-    else:
-        st.markdown("Get AI-powered suggestions to improve your resume for this specific job.")
-        
-        st.subheader("Refinement Suggestions")
-        
-        with st.spinner("Generating suggestions..."):
-            try:
-                suggestions = tailoring_service.generate_suggestions(
-                    st.session_state.resume_data,
-                    st.session_state.job_data,
-                    st.session_state.match_results
-                )
-                
-                st.success("Suggestions generated!")
-                
-                if isinstance(suggestions, dict):
-                    # Display by category
-                    for category, items in suggestions.items():
-                        with st.expander(f"{category.title()}", expanded=True):
-                            if isinstance(items, list):
-                                for i, item in enumerate(items, 1):
-                                    st.markdown(f"**{i}. {item}**")
-                            else:
-                                st.write(items)
-                else:
-                    st.write(suggestions)
-                
-                # Export suggestions
-                st.markdown("---")
-                st.subheader("Export")
-                
-                export_data = {
-                    "match_results": st.session_state.match_results,
-                    "suggestions": suggestions
-                }
-                
-                col1, col2 = st.columns(2)
-                
-                with col1:
-                    if st.button("Copy JSON", use_container_width=True):
-                        st.code(json.dumps(export_data, indent=2), language="json")
-                
-                with col2:
-                    if st.download_button(
-                        label="Download Report",
-                        data=json.dumps(export_data, indent=2),
-                        file_name="resume_analysis.json",
-                        mime="application/json",
-                        use_container_width=True
-                    ):
-                        st.success("Downloaded!")
-                        
-            except Exception as e:
-                st.error(f"Error generating suggestions: {str(e)}")
-
-# ===========================
-# PAGE: About
-# ===========================
-elif page == "About":
-    st.header("About Resume AI")
-    
+# Results Section
+if st.session_state.match_results:
     st.markdown("""
-    ### What is Resume AI?
+        <div class="analyzer">
+            <h3 style="margin-bottom: 32px;">Analysis Results</h3>
+    """, unsafe_allow_html=True)
     
-    Resume AI is an intelligent resume analysis and matching platform that uses:
+    # Match Score
+    st.markdown("""<div class="score-card">""", unsafe_allow_html=True)
     
-    - **AI-Powered Parsing**: Extract structured data from PDF/DOCX resumes
-    - **Semantic Matching**: Compare skills and experience using NLP embeddings
-    - **Job Analysis**: Understand requirements from job descriptions
-    - **Smart Suggestions**: Get actionable tailoring recommendations
-    
-    ### How It Works
-    
-    1. **Upload & Parse**: Your resume is parsed into structured data
-    2. **Job Analysis**: Enter a job description to analyze requirements
-    3. **Match Scoring**: Get a detailed match percentage across skills, experience, and keywords
-    4. **Refinement**: Receive personalized suggestions to improve your resume
-    
-    ### Privacy
-    
-    - No data is stored permanently
-    - Files are processed and deleted immediately
-    - No tracking or external sharing
-    
-    ### Features
-    
-    """)
-    
-    col1, col2, col3 = st.columns(3)
-    
+    col1, col2 = st.columns([1, 1])
     with col1:
-        st.metric("Match Accuracy", "95%+")
-        st.caption("AI-powered matching")
-    
+        st.markdown("<h4>Match Score</h4>", unsafe_allow_html=True)
     with col2:
-        st.metric("Supported Formats", "2")
-        st.caption("PDF & DOCX")
+        score = st.session_state.match_results.get("overall_score", 0)
+        st.markdown(f"<div style='font-size: 48px; font-weight: 800; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: right;'>{score:.1f}%</div>", unsafe_allow_html=True)
     
-    with col3:
-        st.metric("Processing Speed", "<5s")
-        st.caption("Fast analysis")
+    # Score Breakdown
+    st.markdown("<div style='margin-top: 32px;'>", unsafe_allow_html=True)
     
-    st.markdown("---")
-    st.markdown("""
-    ### Support
+    score_items = [
+        ("Skills Match", st.session_state.match_results.get("skills_score", 0)),
+        ("Experience Match", st.session_state.match_results.get("experience_score", 0)),
+        ("Keywords Match", st.session_state.match_results.get("keyword_score", 0)),
+    ]
     
-    For issues or feature requests, please contact the development team.
-    """)
+    for label, value in score_items:
+        col1, col2, col3 = st.columns([2, 6, 1])
+        with col1:
+            st.markdown(f"<span style='font-size: 14px; color: #6b7280;'>{label}</span>", unsafe_allow_html=True)
+        with col2:
+            st.markdown(f"""
+                <div style='height: 8px; background: #f9fafb; border-radius: 4px; overflow: hidden;'>
+                    <div style='height: 100%; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); width: {value}%;'></div>
+                </div>
+            """, unsafe_allow_html=True)
+        with col3:
+            st.markdown(f"<span style='font-weight: 600;'>{value:.1f}%</span>", unsafe_allow_html=True)
+    
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+    
+    # Missing Skills
+    missing_skills = st.session_state.match_results.get("missing_skills", [])
+    if missing_skills:
+        st.markdown("""<div class="score-card"><h4>Missing Skills</h4>""", unsafe_allow_html=True)
+        skills_html = "".join([f'<span class="skill-tag">{skill}</span>' for skill in missing_skills[:10]])
+        st.markdown(f"<div>{skills_html}</div>", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    # Suggestions
+    st.markdown("""<div class="score-card"><h4>Tailored Suggestions</h4>""", unsafe_allow_html=True)
+    suggestions = st.session_state.match_results.get("suggestions", [])
+    for suggestion in suggestions[:5]:
+        st.markdown(f"""
+            <div style='padding: 20px; background: #f9fafb; border-radius: 12px; margin-bottom: 16px; border-left: 4px solid #667eea;'>
+                <h5 style='color: #667eea; margin-bottom: 8px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;'>{suggestion.get('section', 'Suggestion')}</h5>
+                <p style='margin-bottom: 8px; font-size: 15px;'><strong>{suggestion.get('suggestion', '')}</strong></p>
+                <small style='color: #6b7280; font-style: italic;'>{suggestion.get('justification', '')}</small>
+            </div>
+        """, unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+    
+    st.markdown("</div>", unsafe_allow_html=True)
+
+# How It Works Section
+st.markdown("""
+    <div class="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps-grid">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Upload Resume</h3>
+                <p>Upload your resume in PDF or DOCX format</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Add Job Description</h3>
+                <p>Paste the job posting you're interested in</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>AI Analysis</h3>
+                <p>Our AI analyzes semantic match using embeddings</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>Get Insights</h3>
+                <p>Receive match score and tailored suggestions</p>
+            </div>
+        </div>
+    </div>
+""", unsafe_allow_html=True)
 
 # Footer
-st.markdown("---")
-st.markdown(
-    '<div style="text-align: center; color: #888; font-size: 0.8rem;">'
-    'Resume AI | Powered by OpenAI & Sentence Transformers'
-    '</div>',
-    unsafe_allow_html=True
-)
+st.markdown("""
+    <div class="footer">
+        <p>Built with ❤ using FastAPI, SentenceTransformers, and OpenAI</p>
+        <div style="margin-top: 16px; display: flex; justify-content: center; gap: 24px;">
+            <a href="http://localhost:8000/docs" target="_blank" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">API Docs</a>
+            <a href="https://github.com" target="_blank" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">GitHub</a>
+        </div>
+    </div>
+""", unsafe_allow_html=True)

@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+import os
 from app.core.config import settings
 from app.core.logging import setup_logging
 from app.api.routes import resume, job, match, refine
@@ -33,3 +35,8 @@ app.include_router(refine.router, prefix=f"{settings.API_V1_STR}/refine", tags=[
 @app.get("/health")
 def health_check():
     return {"status": "ok", "app_name": settings.PROJECT_NAME}
+
+# Serve frontend static files
+frontend_path = os.path.join(os.path.dirname(__file__), "..", "frontend")
+if os.path.exists(frontend_path):
+    app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend")
