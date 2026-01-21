@@ -5,8 +5,10 @@ WORKDIR /code
 # Copy requirements first (for better caching)
 COPY ./requirements.txt /code/requirements.txt
 
-# Install dependencies
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+# Install dependencies with optimizations
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir --upgrade wheel && \
+    pip install --no-cache-dir -r /code/requirements.txt
 
 # Copy app code
 COPY ./app /code/app
