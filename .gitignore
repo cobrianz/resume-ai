@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Project specific
+temp_uploads/
+*.docx
+*.pdf
+sample_resume.*
+health_check.py
+
+# Environment
+.env
+.env.local
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Model cache (SentenceTransformers)
+.cache/
+models/
+
+# Vector store (if using persistent)
+vector_store/*.db
+vector_store/*.sqlite

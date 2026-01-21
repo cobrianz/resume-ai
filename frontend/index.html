@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Resume AI - Smart Resume Analysis</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <rect width="40" height="40" rx="8" fill="url(#gradient)" />
+                    <path d="M12 15h16M12 20h16M12 25h10" stroke="white" stroke-width="2" stroke-linecap="round" />
+                    <defs>
+                        <linearGradient id="gradient" x1="0" y1="0" x2="40" y2="40">
+                            <stop offset="0%" stop-color="#667eea" />
+                            <stop offset="100%" stop-color="#764ba2" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Resume AI</span>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="nav" id="mainNav">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="http://localhost:8000/docs" target="_blank">API Docs</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">AI-Powered Analysis</div>
+                <h1 class="hero-title">
+                    Build a Job-Winning <span class="gradient-text">Resume</span>
+                    <br>Effortlessly with AI.
+                </h1>
+                <p class="hero-subtitle">
+                    Build a standout, job-ready resume in minutes with AI. Get career-polished, and tailored
+                    content—fast, simple, and effortlessly professional.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#analyzer" class="cta-button primary">
+                        Analyze Your Resume
+                    </a>
+                    <a href="#how-it-works" class="cta-button secondary">
+                        See How It Works
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">10.4</div>
+                        <div class="stat-label">Rating</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-number">1000+</div>
+                        <div class="stat-label">Resumes Analyzed</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-decoration"></div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Powerful Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <rect x="8" y="8" width="24" height="28" rx="2" stroke="#667eea" stroke-width="2" />
+                            <line x1="12" y1="14" x2="20" y2="14" stroke="#667eea" stroke-width="2" />
+                            <line x1="12" y1="19" x2="28" y2="19" stroke="#667eea" stroke-width="2" />
+                            <line x1="12" y1="24" x2="28" y2="24" stroke="#667eea" stroke-width="2" />
+                        </svg>
+                    </div>
+                    <h3>Smart Parsing</h3>
+                    <p>Automatically extract skills, experience, and education from PDF/DOCX resumes</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <circle cx="20" cy="20" r="12" stroke="#667eea" stroke-width="2" />
+                            <circle cx="20" cy="20" r="3" fill="#667eea" />
+                            <line x1="20" y1="8" x2="20" y2="14" stroke="#667eea" stroke-width="2" />
+                        </svg>
+                    </div>
+                    <h3>AI Matching</h3>
+                    <p>Semantic analysis with 40% skills + 40% experience + 20% keywords scoring</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <path d="M20 10 L25 20 L20 30 L15 20 Z" stroke="#667eea" stroke-width="2" fill="none" />
+                            <circle cx="20" cy="20" r="2" fill="#667eea" />
+                        </svg>
+                    </div>
+                    <h3>Smart Suggestions</h3>
+                    <p>Get context-aware recommendations to improve your resume for specific roles</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <rect x="12" y="16" width="16" height="14" rx="2" stroke="#667eea" stroke-width="2" />
+                            <path d="M16 16 V13 C16 11 17 10 20 10 C23 10 24 11 24 13 V16" stroke="#667eea"
+                                stroke-width="2" />
+                        </svg>
+                    </div>
+                    <h3>Privacy First</h3>
+                    <p>Your data is never stored. All files are auto-deleted after analysis</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Analyzer -->
+    <section id="analyzer" class="analyzer">
+        <div class="container">
+            <h2 class="section-title">Analyze Your Resume</h2>
+
+            <div class="analyzer-container">
+                <!-- Step 1: Upload Resume -->
+                <div class="upload-section">
+                    <h3>Step 1: Upload Your Resume</h3>
+                    <div class="file-upload" id="fileUpload">
+                        <input type="file" id="resumeFile" accept=".pdf,.docx" hidden>
+                        <div class="upload-placeholder" id="uploadPlaceholder">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <path d="M24 16v16m-8-8h16" stroke="#667eea" stroke-width="2" stroke-linecap="round" />
+                                <rect x="8" y="8" width="32" height="32" rx="4" stroke="#667eea" stroke-width="2" />
+                            </svg>
+                            <p>Click to upload or drag & drop</p>
+                            <span>PDF or DOCX (Max 10MB)</span>
+                        </div>
+                        <div class="file-info" id="fileInfo" style="display: none;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 12l2 2 4-4" stroke="#10b981" stroke-width="2" stroke-linecap="round" />
+                                <circle cx="12" cy="12" r="10" stroke="#10b981" stroke-width="2" />
+                            </svg>
+                            <div>
+                                <p id="fileName"></p>
+                                <span id="fileSize"></span>
+                            </div>
+                            <button class="remove-btn" id="removeFile">×</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Job Description -->
+                <div class="job-section">
+                    <h3>Step 2: Paste Job Description</h3>
+                    <textarea id="jobDescription" placeholder="Paste the job description here...
+
+Example:
+Senior Python Developer
+
+Responsibilities:
+- Build scalable REST APIs using FastAPI
+- Design database schemas
+
+Requirements:
+- 5+ years Python experience
+- Strong knowledge of FastAPI and Docker" rows="12"></textarea>
+                </div>
+
+                <!-- Analyze Button -->
+                <button class="analyze-btn" id="analyzeBtn" disabled>
+                    <span id="btnText">Analyze Resume</span>
+                    <div class="spinner" id="spinner" style="display: none;"></div>
+                </button>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section" id="results" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="margin-bottom: 0;">Analysis Results</h3>
+                    <button class="refine-btn" id="refineBtn"
+                        style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2); transition: transform 0.2s;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                        </svg>
+                        <span id="refineBtnText">Refine Resume</span>
+                        <div class="spinner" id="refineSpinner"
+                            style="display: none; width: 16px; height: 16px; border-width: 2px; border-color: white white transparent transparent;">
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Match Score -->
+                <div class="score-card">
+                    <div class="score-header">
+                        <h4>Match Score</h4>
+                        <div class="overall-score" id="overallScore">0%</div>
+                    </div>
+                    <div class="score-breakdown">
+                        <div class="score-item">
+                            <span>Skills Match</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="skillProgress"></div>
+                            </div>
+                            <span id="skillScore">0%</span>
+                        </div>
+                        <div class="score-item">
+                            <span>Experience Match</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="expProgress"></div>
+                            </div>
+                            <span id="expScore">0%</span>
+                        </div>
+                        <div class="score-item">
+                            <span>Keyword Match</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="keywordProgress"></div>
+                            </div>
+                            <span id="keywordScore">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Missing Skills -->
+                <div class="missing-skills" id="missingSkillsSection" style="display: none;">
+                    <h4>Missing Skills</h4>
+                    <div class="skills-tags" id="missingSkills"></div>
+                </div>
+
+                <!-- Suggestions -->
+                <div class="suggestions-card">
+                    <h4>Tailored Suggestions</h4>
+                    <div class="suggestions-list" id="suggestionsList"></div>
+                </div>
+
+                <!-- Refined Content -->
+                <div id="refinedContent" class="suggestions-card"
+                    style="display: none; border-left: 4px solid #10b981; margin-top: 20px;">
+                    <h4 style="color: #059669;">Refined Content</h4>
+
+                    <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <h5
+                            style="color: #047857; margin-bottom: 10px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                            New Professional Summary</h5>
+                        <p id="refinedSummary" style="color: #064e3b; line-height: 1.6; margin: 0;"></p>
+                    </div>
+
+                    <div style="background: #f0fdf4; padding: 15px; border-radius: 8px;">
+                        <h5
+                            style="color: #047857; margin-bottom: 10px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Enhanced Experience Points</h5>
+                        <div id="refinedExperience" style="color: #064e3b; line-height: 1.6;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Upload Resume</h3>
+                    <p>Upload your resume in PDF or DOCX format</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Add Job Description</h3>
+                    <p>Paste the job posting you're interested in</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>AI Analysis</h3>
+                    <p>Our AI analyzes semantic match using embeddings</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Get Insights</h3>
+                    <p>Receive match score and tailored suggestions</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Built with ❤️ using FastAPI, SentenceTransformers, and FAISS</p>
+            <div class="footer-links">
+                <a href="http://localhost:8000/docs" target="_blank">API Docs</a>
+                <a href="https://github.com" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js?v=2"></script>
+</body>
+
+</html>
